@@ -1,0 +1,187 @@
+type Block @entity {
+	id: ID!
+	hash: String
+	timestamp: Date
+	parentHash: String
+	specVersion: String
+	stateRoot: String
+	extrinsicsRoot: String
+	size: Int
+	
+	extrinsics: [Extrinsic] @derivedFrom(field: "block")
+	transactions: [Transaction] @derivedFrom(field: "block")
+	events: [Event] @derivedFrom(field: "block")
+	# collators, blockReward, status/finalized, gasUsed, gasLimit
+}
+
+
+type Extrinsic  @entity {
+	id: ID!
+	block: Block
+	isSigned: Boolean
+	signer: Account
+	section: String
+	method: String
+	index: Int
+	success: Boolean
+	transaction: Transaction
+	arguments: String
+	# lifeTime, evm, nonce
+}
+
+
+type Event @entity {
+	id: ID!
+	index: Int
+	block: Block
+	timestamp: Date
+	section: String
+	method: String
+	docs: String
+	arguments: String
+	data: String
+	extrinsic: Extrinsic
+}
+
+
+type Account @entity {
+	id: ID!
+	extrinsics: [Extrinsic] @derivedFrom(field: "signer")
+	#txCount: BigInt
+	#createAtBlock: Block
+	# transfers, balance, type(contract?)
+}
+
+
+type Log @entity {
+	id: ID!
+	transaction: Transaction
+	transactionIndex: Int
+	block: Block
+	index: Int
+	timestamp: Date
+	address: String
+	data: String
+	topics: String
+	arguments: String
+	logIndex: Int
+	removed: Boolean
+}
+
+
+type Transaction @entity {
+	id: ID!
+	block: Block
+	extrinsic: Extrinsic @derivedFrom(field: "transaction")
+	from: String
+	to: String
+	success: Boolean
+	value: BigInt
+	nonce: Int
+	gasLimit: BigInt
+	gasPrice: BigInt
+	maxFeePerGas: BigInt
+	type: Int
+	data: String
+	arguments: String
+	logs: [Log] @derivedFrom(field: "transaction")
+	# index (extrinsic), gasUsed/fee, extrinsic, transfers
+}
+
+
+type BalanceMOVR @entity {
+	id: ID!
+	account: Account
+	type: String
+	amount: BigInt
+}
+
+
+type Balance20 @entity {
+	id: ID!
+	owner: Account
+	token: ERC20Token
+	amount: BigInt
+}
+
+
+type Balance721 @entity {
+	id: ID!
+	owner: Account
+	token: ERC721Token
+	tokenIDs: [Int]
+}
+
+
+type Contract @entity {
+	id: ID!
+	creator: Account
+	creationHash: Transaction
+}
+
+
+type ERC20Token @entity {
+	id: ID!
+	symbol: String
+	name: String
+	supply: String
+	decimal: Int
+	holders: [Account]
+}
+
+
+type ERC721Token @entity {
+	id: ID!
+	symbol: String
+	name: String
+	tokenIDs: [Int]
+	holders: [Account]
+}
+
+
+type MOVRTransfer @entity {
+	id: ID!
+	index: Int
+	block: Block
+	extrinsic: Extrinsic
+	from: Account
+	to: Account
+	value: String
+}
+
+
+type ERC20TokenTransfer @entity {
+	id: ID!
+	from: Account
+	to: Account
+	token: ERC20Token
+	amount: BigInt
+}
+
+
+type ERC721TokenTransfer @entity {
+	id: ID!
+	from: Account
+	to: Account
+	token: ERC721Token
+	tokenID: Int
+}
+
+
+type Collator @entity {
+	id: ID!
+	joinedExtrinsic: Extrinsic
+	active: Boolean
+	#blocks: [Block]
+	#rewards: []
+	#delegators: [Delegator]
+}
+
+
+type Delegator @entity {
+	id: ID!
+}
+
+
+# vote/stake/nominating
+# rewards, block generated

@@ -1,0 +1,40 @@
+specVersion: 0.2.0
+name: moonriver
+version: 1.0.0
+description: Moonriver Substrate and EVM data
+repository: 'https://github.com/bizzyvinci/moonriver-unified-subquery'
+
+schema:
+  file: ./schema.graphql
+
+network:
+  genesisHash: '0x401a1f9dca3da46f5c4091016c8a2f26dcea05865116b286f60f668207d1474b'
+  endpoint: wss://moonriver.api.onfinality.io/public-ws
+  dictionary: 'https://api.subquery.network/sq/subquery/moonriver-dictionary'
+  chaintypes:
+    file: "./types.yaml"
+
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 1_000_000
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleBlock
+          kind: substrate/BlockHandler
+        - handler: handleEvent
+          kind: substrate/EventHandler
+        - handler: handleCall
+          kind: substrate/CallHandler
+
+  - kind: substrate/Moonbeam
+    startBlock: 1_000_000
+    processor:
+      file: './node_modules/@subql/contract-processors/dist/moonbeam.js'
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleEVMEvent
+          kind: substrate/MoonbeamEvent
+        #- handler: handleEVMCall
+        #  kind: substrate/MoonbeamCall

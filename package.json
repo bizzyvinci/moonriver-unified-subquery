@@ -1,0 +1,31 @@
+{
+  "name": "moonriver",
+  "version": "1.0.0",
+  "description": "Moonriver Substrate and EVM data",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "prepack": "rm -rf dist && npm build",
+    "test": "jest",
+    "codegen": "./node_modules/.bin/subql codegen"
+  },
+  "homepage": "https://github.com/bizzyvinci/moonriver-unified-subquery",
+  "repository": "github:bizzyvinci/moonriver-unified-subquery",
+  "files": [
+    "dist",
+    "schema.graphql",
+    "project.yaml"
+  ],
+  "author": "Bisola Olasehinde",
+  "license": "MIT",
+  "devDependencies": {
+    "@polkadot/api": "^6.6.1",
+    "@subql/cli": "^0.15.0",
+    "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "@subql/contract-processors": "^0.3.0",
+    "@subql/types": "^0.10.0",
+    "ethers": "^5.5.0"
+  }
+}
