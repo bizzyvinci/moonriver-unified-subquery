@@ -1,18 +1,20 @@
 import { MoonbeamEvent } from '@subql/contract-processors/dist/moonbeam'
+import { ensureBlock } from './block'
+import { ensureTransaction } from './transaction'
 import { Log } from '../types'
 
 
 export async function ensureLog(event: MoonbeamEvent) {
-	const transactionHash = event.transactionHash
+	const transaction = await ensureTransaction(event.transactionHash)
 	const transactionIndex = event.transactionIndex
 	const logIndex = event.logIndex
 	
-	const recordId = `${transactionHash}-${logIndex}`
+	const recordId = `${transaction.id}-${logIndex}`
 	let data = await Log.get(recordId)
 
 	if (!data) {
 		data = new Log(recordId)
-		data.transactionId = transactionHash
+		data.transactionId = transaction.id
 		data.transactionIndex = transactionIndex
 		data.logIndex = logIndex
 		await data.save()
@@ -22,9 +24,9 @@ export async function ensureLog(event: MoonbeamEvent) {
 
 export async function createLog(event: MoonbeamEvent) {
 	const data = await ensureLog(event)
-	
-	data.blockId = event.blockNumber.toString()
-	data.index = event.transactionIndex
+	const block = await ensureBlock(event.blockNumber.toString())
+
+	data.blockId = block.id
 	data.timestamp = event.blockTimestamp
 	// null address probably means internalTransaction
 	data.address = event.address.toString()

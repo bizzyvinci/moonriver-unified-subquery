@@ -8,7 +8,7 @@ import { createEthereum } from './ethereum'
 
 
 export async function ensureEvent(event: SubstrateEvent) {
-	const block = await ensureBlock(event.block)
+	const block = await ensureBlock(event.block.block.header.number.toString())
 	const idx = event.idx
 	const recordId = `${block.id}-${idx}`
 	let data = await Event.get(recordId)

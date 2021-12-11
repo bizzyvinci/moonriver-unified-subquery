@@ -19,7 +19,7 @@ export async function createExtrinsic(extrinsic: SubstrateExtrinsic) {
 	const data = await ensureExtrinsic(extrinsic)
 	
 	const isSigned = extrinsic.extrinsic.isSigned
-	const block = await ensureBlock(extrinsic.block)
+	const block = await ensureBlock(extrinsic.block.block.header.number.toString())
 	if (isSigned) {
 		const signerAccount = extrinsic.extrinsic.signer.toString()
 		const signer = await ensureAccount(signerAccount)

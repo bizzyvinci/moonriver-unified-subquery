@@ -6,7 +6,7 @@ import { ensureAccount } from '../account'
 
 
 export async function ensureTransfer(event: SubstrateEvent) {
-	const block = await ensureBlock(event.block)
+	const block = await ensureBlock(event.block.block.header.number.toString())
 	const extrinsic = await ensureExtrinsic(event.extrinsic)
 	const idx = event.idx
 	const recordId = `${block.id}-${idx}`

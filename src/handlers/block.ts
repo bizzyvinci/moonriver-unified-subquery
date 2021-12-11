@@ -2,8 +2,7 @@ import { SubstrateBlock } from '@subql/types'
 import { Block } from '../types'
 
 
-export async function ensureBlock(block: SubstrateBlock) {
-	const recordId = block.block.header.number.toString()
+export async function ensureBlock(recordId: string) {
 	let data = await Block.get(recordId)
 	if (!data) {
 		data = new Block(recordId)
@@ -12,17 +11,17 @@ export async function ensureBlock(block: SubstrateBlock) {
 	return data
 }
 
-export async function createBlock(origin: SubstrateBlock) {
-	const data = await ensureBlock(origin)
+export async function createBlock(block: SubstrateBlock) {
+	const data = await ensureBlock(block.block.header.number.toString())
 	
-	data.hash = origin.block.hash?.toString()
-	data.timestamp = origin.timestamp //.toDate?
-	data.parentHash = origin.block.header.parentHash?.toString()
-	data.specVersion = origin.specVersion?.toString()
-	data.stateRoot = origin.block.header.stateRoot?.toString()
-	data.extrinsicsRoot = origin.block.header.extrinsicsRoot?.toString()
+	data.hash = block.block.hash?.toString()
+	data.timestamp = block.timestamp //.toDate?
+	data.parentHash = block.block.header.parentHash?.toString()
+	data.specVersion = block.specVersion?.toString()
+	data.stateRoot = block.block.header.stateRoot?.toString()
+	data.extrinsicsRoot = block.block.header.extrinsicsRoot?.toString()
 	// This is probably not the block size but variable size
-	data.size = origin.block.size
+	data.size = block.block.size
 
 	await data.save()
 	return data

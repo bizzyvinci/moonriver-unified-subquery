@@ -58,7 +58,6 @@ type Log @entity {
 	transaction: Transaction
 	transactionIndex: Int
 	block: Block
-	index: Int
 	timestamp: Date
 	address: String
 	data: String
@@ -89,56 +88,6 @@ type Transaction @entity {
 }
 
 
-type BalanceMOVR @entity {
-	id: ID!
-	account: Account
-	type: String
-	amount: BigInt
-}
-
-
-type Balance20 @entity {
-	id: ID!
-	owner: Account
-	token: ERC20Token
-	amount: BigInt
-}
-
-
-type Balance721 @entity {
-	id: ID!
-	owner: Account
-	token: ERC721Token
-	tokenIDs: [Int]
-}
-
-
-type Contract @entity {
-	id: ID!
-	creator: Account
-	creationHash: Transaction
-}
-
-
-type ERC20Token @entity {
-	id: ID!
-	symbol: String
-	name: String
-	supply: String
-	decimal: Int
-	holders: [Account]
-}
-
-
-type ERC721Token @entity {
-	id: ID!
-	symbol: String
-	name: String
-	tokenIDs: [Int]
-	holders: [Account]
-}
-
-
 type MOVRTransfer @entity {
 	id: ID!
 	index: Int
@@ -150,22 +99,72 @@ type MOVRTransfer @entity {
 }
 
 
-type ERC20TokenTransfer @entity {
-	id: ID!
-	from: Account
-	to: Account
-	token: ERC20Token
-	amount: BigInt
-}
+# type BalanceMOVR @entity {
+# 	id: ID!
+# 	account: Account
+# 	type: String
+# 	amount: BigInt
+# }
 
 
-type ERC721TokenTransfer @entity {
-	id: ID!
-	from: Account
-	to: Account
-	token: ERC721Token
-	tokenID: Int
-}
+# type Balance20 @entity {
+# 	id: ID!
+# 	owner: Account
+# 	token: ERC20Token
+# 	amount: BigInt
+# }
+
+
+# type Balance721 @entity {
+# 	id: ID!
+# 	owner: Account
+# 	token: ERC721Token
+# 	tokenIDs: [Int]
+# }
+
+
+# type Contract @entity {
+# 	id: ID!
+# 	creator: Account
+# 	creationHash: Transaction
+# }
+
+
+# type ERC20Token @entity {
+# 	id: ID!
+# 	symbol: String
+# 	name: String
+# 	supply: String
+# 	decimal: Int
+# 	holders: [Account]
+# }
+
+
+# type ERC721Token @entity {
+# 	id: ID!
+# 	symbol: String
+# 	name: String
+# 	tokenIDs: [Int]
+# 	holders: [Account]
+# }
+
+
+# type ERC20TokenTransfer @entity {
+# 	id: ID!
+# 	from: Account
+# 	to: Account
+# 	token: ERC20Token
+# 	amount: BigInt
+# }
+
+
+# type ERC721TokenTransfer @entity {
+# 	id: ID!
+# 	from: Account
+# 	to: Account
+# 	token: ERC721Token
+# 	tokenID: Int
+# }
 
 
 type Collator @entity {

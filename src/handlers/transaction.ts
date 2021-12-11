@@ -1,4 +1,5 @@
 import { MoonbeamCall } from '@subql/contract-processors/dist/moonbeam'
+import { ensureBlock } from './block'
 import { Transaction } from '../types'
 
 
@@ -13,8 +14,9 @@ export async function ensureTransaction(hash: string) {
 
 export async function createTransaction(call: MoonbeamCall) {
 	const data = await ensureTransaction(call.hash)
+	const block = await ensureBlock(call.blockNumber.toString())
 
-	data.blockId = call.blockNumber.toString()
+	data.blockId = block.id
 	data.from = call.from.toString()
 	data.to = call.to.toString()
 	data.success = call.success
