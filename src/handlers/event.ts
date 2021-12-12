@@ -40,13 +40,13 @@ export async function createEvent(event: SubstrateEvent) {
 
 	await data.save()
 
-	if (data.method === 'parachainStaking') {
-		await createStaking(event)
-	} else if (data.method === 'balances') {
-		await createBalances(event)
-	} else if (data.method === 'ethereum') {
-		await createEthereum(event)
-	}
+	// if (data.method === 'parachainStaking') {
+	// 	await createStaking(event)
+	// } else if (data.method === 'balances') {
+	// 	await createBalances(event)
+	// } else if (data.method === 'ethereum') {
+	// 	await createEthereum(event)
+	// }
 
 	return data
 }

@@ -15,9 +15,9 @@ export async function handleCall(extrinsic: SubstrateExtrinsic): Promise<void> {
     await createExtrinsic(extrinsic)
 }
 
-export async function handleEVMEvent(event: MoonbeamEvent): Promise<void> {
-    await createLog(event)
-}
+// export async function handleEVMEvent(event: MoonbeamEvent): Promise<void> {
+//     await createLog(event)
+// }
 
 export async function handleEVMCall(call: MoonbeamCall): Promise<void> {
     await createTransaction(call)

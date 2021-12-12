@@ -18,16 +18,16 @@ export async function createTransaction(call: MoonbeamCall) {
 
 	data.blockId = block.id
 	data.from = call.from.toString()
-	data.to = call.to.toString()
+	data.to = call.to?.toString()
 	data.success = call.success
 	
-	data.value = call.value.toBigInt()
+	data.value = call.value?.toBigInt()
 	data.nonce = call.nonce
-	data.gasLimit = call.gasLimit.toBigInt()
-	data.gasPrice = call.gasPrice.toBigInt()
-	data.maxFeePerGas = call.maxFeePerGas.toBigInt()
+	data.gasLimit = call.gasLimit?.toBigInt()
+	data.gasPrice = call.gasPrice?.toBigInt()
+	data.maxFeePerGas = call.maxFeePerGas?.toBigInt()
 	data.type = call.type
 	data.data = call.data.toString()
 	// lazy method
-	data.arguments = call.args.toString()
+	data.arguments = call.args?.toString()
 }
