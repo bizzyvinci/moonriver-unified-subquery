@@ -47,6 +47,8 @@ type Event @entity {
 type Account @entity {
 	id: ID!
 	extrinsics: [Extrinsic] @derivedFrom(field: "signer")
+	inTransactions: [Transaction] @derivedFrom(field: "to")
+	outTransactions: [Transaction] @derivedFrom(field: "from")
 	#txCount: BigInt
 	#createAtBlock: Block
 	# transfers, balance, type(contract?)
@@ -72,8 +74,8 @@ type Transaction @entity {
 	id: ID!
 	block: Block
 	extrinsic: Extrinsic @derivedFrom(field: "transaction")
-	from: String
-	to: String
+	from: Account
+	to: Account
 	success: Boolean
 	value: BigInt
 	nonce: Int
