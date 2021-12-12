@@ -85,7 +85,7 @@ type Transaction @entity {
 	type: Int
 	data: String
 	arguments: String
-	#logs: [Log] @derivedFrom(field: "transaction")
+	logs: [Log] @derivedFrom(field: "transaction")
 	# index (extrinsic), gasUsed/fee, extrinsic, transfers
 }
 
