@@ -34,7 +34,7 @@ dataSources:
     mapping:
       file: ./dist/index.js
       handlers:
-        # - handler: handleEVMEvent
-        #   kind: substrate/MoonbeamEvent
+        - handler: handleEVMEvent
+          kind: substrate/MoonbeamEvent
         - handler: handleEVMCall
           kind: substrate/MoonbeamCall

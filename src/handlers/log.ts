@@ -34,7 +34,7 @@ export async function createLog(event: MoonbeamEvent) {
 	
 	// lazy method
 	data.topics = event.topics.toString()
-	data.arguments = event.args.toString()
+	data.arguments = event.args?.toString()
 	
 	data.removed = event.removed
 
