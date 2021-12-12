@@ -36,5 +36,5 @@ dataSources:
       handlers:
         - handler: handleEVMEvent
           kind: substrate/MoonbeamEvent
-        #- handler: handleEVMCall
-        #  kind: substrate/MoonbeamCall
+        - handler: handleEVMCall
+          kind: substrate/MoonbeamCall
