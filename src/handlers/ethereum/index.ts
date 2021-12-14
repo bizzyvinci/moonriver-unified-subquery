@@ -5,7 +5,7 @@ import { ensureTransaction } from '../transaction'
 //import { createToken } from './token'
 
 export async function createEthereum(event: SubstrateEvent) {
-	if (event.event.section === 'Executed') {
+	if (event.event.method === 'Executed') {
 		// Link transaction hash to extrinsic
 		const transactionHash = event.event.data[2].toString()
 		const transaction = await ensureTransaction(transactionHash)

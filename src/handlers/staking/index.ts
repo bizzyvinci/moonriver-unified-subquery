@@ -4,11 +4,11 @@ import { activateCollator, deactivateCollator } from './collator'
 
 
 export async function createStaking(event: SubstrateEvent) {
-	if (event.event.section === 'JoinedCollatorCandidates') {
+	if (event.event.method === 'JoinedCollatorCandidates') {
 		await activateCollator(event)
-	} else if (event.event.section === 'CandidateLeft') {
+	} else if (event.event.method === 'CandidateLeft') {
 		await deactivateCollator(event)
-	} else if (event.event.section === 'Delegator') {
+	} else if (event.event.method === 'Delegator') {
 		return null
 	}
 }

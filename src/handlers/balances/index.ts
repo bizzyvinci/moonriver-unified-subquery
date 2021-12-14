@@ -3,7 +3,7 @@ import { createTransfer } from './transfer'
 
 
 export async function createBalances(event: SubstrateEvent) {
-	if (event.event.section === 'Transfer') {
+	if (event.event.method === 'Transfer') {
 		await createTransfer(event)
 	}
 	// Deposit and Withdraw affects balance
