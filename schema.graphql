@@ -74,7 +74,7 @@ type Log @entity {
 type Transaction @entity {
 	id: ID!
 	block: Block
-	extrinsic: Extrinsic @derivedFrom(field: "transaction")
+	extrinsic: Extrinsic
 	from: Account
 	to: Account
 	success: Boolean
