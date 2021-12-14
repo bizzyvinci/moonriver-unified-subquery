@@ -33,4 +33,7 @@ export async function createTransaction(call: MoonbeamCall) {
 	data.data = call.data.toString()
 	// lazy method
 	data.arguments = call.args?.toString()
+
+	await data.save()
+	return data
 }
