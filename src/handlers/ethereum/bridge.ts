@@ -11,7 +11,7 @@ export async function linkTransaction(event: SubstrateEvent) {
 		extrinsic.transactionId = transaction.id
 		transaction.extrinsicId = extrinsic.id
 		
-		extrinsic.save()
-		transaction.save()
+		await extrinsic.save()
+		await transaction.save()
 	}
 }
