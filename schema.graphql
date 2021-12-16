@@ -47,13 +47,6 @@ type Event @entity {
 
 type Account @entity {
 	id: ID!
-	extrinsics: [Extrinsic] @derivedFrom(field: "signer")
-	inTransactions: [Transaction] @derivedFrom(field: "to")
-	outTransactions: [Transaction] @derivedFrom(field: "from")
-	erc20balances: [ERC20Balance] @derivedFrom(field: "account")
-	erc721balances: [ERC721Balance] @derivedFrom(field: "account")
-	# transfers, balance, type(contract?)
-
 	# Contracts
 	isContract: Boolean
 	creator: Account
