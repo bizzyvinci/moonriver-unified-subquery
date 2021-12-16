@@ -43,9 +43,9 @@ export async function createLog(event: MoonbeamEvent) {
 		// Transfer
 		case "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
 			if (event.topics.length === 3) {
-				createERC20Transfer(event, data.id)
+				await createERC20Transfer(event, data.id)
 			} else if (event.topics.length === 4) {
-				createERC721Transfer(event, data.id)
+				await createERC721Transfer(event, data.id)
 			}
 		}
 
@@ -53,7 +53,7 @@ export async function createLog(event: MoonbeamEvent) {
 		case "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
 			// Contract Creation
 			if (event.topics[1] === '0x0000000000000000000000000000000000000000000000000000000000000000') {
-				linkContract(event)
+				await linkContract(event)
 			}
 		}
 	}
