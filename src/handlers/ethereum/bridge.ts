@@ -8,10 +8,10 @@ export async function linkTransaction(event: SubstrateEvent) {
 		const transactionHash = event.event.data[2].toString()
 		const transaction = await ensureTransaction(transactionHash)
 		const extrinsic = await ensureExtrinsic(event.extrinsic)
-		extrinsic.transactionId = transaction.id
+		//extrinsic.transactionId = transaction.id
 		transaction.extrinsicId = extrinsic.id
 		
-		await extrinsic.save()
+		//await extrinsic.save()
 		await transaction.save()
 	}
 }

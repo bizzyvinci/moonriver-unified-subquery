@@ -7,7 +7,7 @@ export async function linkContract(event: MoonbeamEvent) {
 
 	account.isContract = true
 	account.creatorId = creator.id
-	account.createdAtId = event.transactionHash
+	account.createdAt = event.transactionHash
 
 	await account.save()
 	return account
