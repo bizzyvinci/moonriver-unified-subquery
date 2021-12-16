@@ -50,9 +50,14 @@ type Account @entity {
 	extrinsics: [Extrinsic] @derivedFrom(field: "signer")
 	inTransactions: [Transaction] @derivedFrom(field: "to")
 	outTransactions: [Transaction] @derivedFrom(field: "from")
-	#txCount: BigInt
-	#createAtBlock: Block
+	erc20balances: [ERC20Balance] @derivedFrom(field: "account")
+	erc721balances: [ERC721Balance] @derivedFrom(field: "account")
 	# transfers, balance, type(contract?)
+
+	# Contracts
+	isContract: Boolean
+	creator: Account
+	createdAt: Transaction
 }
 
 
@@ -102,6 +107,38 @@ type MOVRTransfer @entity {
 }
 
 
+type Timeline @jsonField {
+	status: String
+	extrinsic: String
+	timestamp: Date
+}
+
+
+type Preimage @entity {
+	id: ID!
+	createdAtExtrinsic: Extrinsic
+	author: Account
+}
+
+
+type Proposal @entity {
+	id: ID!
+	deposit: BigInt
+	timeline: [Timeline]
+	preimage: Preimage
+}
+
+
+type Referendum @entity {
+	id: ID!
+	timeline: [Timeline]
+	executed: Boolean
+	preimage: Preimage
+	delay: Int
+	end: BigInt
+	threshold: String
+}
+
 # type BalanceMOVR @entity {
 # 	id: ID!
 # 	account: Account
@@ -110,64 +147,59 @@ type MOVRTransfer @entity {
 # }
 
 
-# type Balance20 @entity {
-# 	id: ID!
-# 	owner: Account
-# 	token: ERC20Token
-# 	amount: BigInt
-# }
+type ERC20Balance @entity {
+	id: ID!
+	account: Account
+	token: ERC20Token
+	value: BigInt
+}
 
 
-# type Balance721 @entity {
-# 	id: ID!
-# 	owner: Account
-# 	token: ERC721Token
-# 	tokenIDs: [Int]
-# }
+type ERC721Balance @entity {
+	id: ID!
+	account: Account
+	token: ERC721Token
+	value: BigInt
+}
 
 
-# type Contract @entity {
-# 	id: ID!
-# 	creator: Account
-# 	creationHash: Transaction
-# }
+type ERC20Token @entity {
+	id: ID!
+	symbol: String
+	name: String
+	decimal: Int
+	supply: BigInt
+	balances: [ERC20Balance] @derivedFrom(field: "token")
+}
 
 
-# type ERC20Token @entity {
-# 	id: ID!
-# 	symbol: String
-# 	name: String
-# 	supply: String
-# 	decimal: Int
-# 	holders: [Account]
-# }
+type ERC721Token @entity {
+	id: ID!
+	symbol: String
+	name: String
+	supply: [BigInt] #array of token ids
+	balances: [ERC721Balance] @derivedFrom(field: "token")
+}
 
 
-# type ERC721Token @entity {
-# 	id: ID!
-# 	symbol: String
-# 	name: String
-# 	tokenIDs: [Int]
-# 	holders: [Account]
-# }
+type ERC20Transfer @entity {
+	id: ID!
+	from: Account
+	to: Account
+	token: ERC20Token
+	value: BigInt
+	log: Log
+}
 
 
-# type ERC20TokenTransfer @entity {
-# 	id: ID!
-# 	from: Account
-# 	to: Account
-# 	token: ERC20Token
-# 	amount: BigInt
-# }
-
-
-# type ERC721TokenTransfer @entity {
-# 	id: ID!
-# 	from: Account
-# 	to: Account
-# 	token: ERC721Token
-# 	tokenID: Int
-# }
+type ERC721Transfer @entity {
+	id: ID!
+	from: Account
+	to: Account
+	token: ERC721Token
+	value: BigInt
+	log: Log
+}
 
 
 type Collator @entity {
