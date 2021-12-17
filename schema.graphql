@@ -195,18 +195,36 @@ type ERC721Transfer @entity {
 }
 
 
-type Collator @entity {
+# There's currently no slash, just rewards
+type Reward @entity {
+	id: ID!
+	account: Account
+	value: BigInt
+	timestamp: Date
+}
+
+
+type Delegation @entity {
+	id: ID!
+	delegator: Delegator
+	candidate: Candidate
+	value: BigInt
+}
+
+
+type Candidate @entity {
 	id: ID!
 	joinedExtrinsic: Extrinsic
-	active: Boolean
+	isChosen: Boolean
+	delegations: [Delegation] @derivedFrom(field: "candidate")
+	selfBonded: BigInt
 	#blocks: [Block]
-	#rewards: []
-	#delegators: [Delegator]
 }
 
 
 type Delegator @entity {
 	id: ID!
+	delegations: [Delegation] @derivedFrom(field: "delegator")
 }
 
 
