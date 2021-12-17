@@ -1,6 +1,5 @@
 import { SubstrateEvent } from '@subql/types'
 import { Reward } from '../../types'
-import { ensureExtrinsic } from '../extrinsic'
 import { ensureAccount } from '../account'
 
 

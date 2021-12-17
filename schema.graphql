@@ -47,6 +47,8 @@ type Event @entity {
 
 type Account @entity {
 	id: ID!
+	freeBalance: BigInt
+	reservedBalance: BigInt
 	# Contracts
 	isContract: Boolean
 	creator: Account
@@ -89,14 +91,14 @@ type Transaction @entity {
 }
 
 
-type MOVRTransfer @entity {
+type Transfer @entity {
 	id: ID!
 	index: Int
 	block: Block
 	extrinsic: Extrinsic
 	from: Account
 	to: Account
-	value: String
+	value: BigInt
 }
 
 
@@ -131,13 +133,6 @@ type Referendum @entity {
 	end: BigInt
 	threshold: String
 }
-
-# type BalanceMOVR @entity {
-# 	id: ID!
-# 	account: Account
-# 	type: String
-# 	amount: BigInt
-# }
 
 
 type ERC20Balance @entity {
