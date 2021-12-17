@@ -27,7 +27,7 @@ const eventAction = {
 }
 
 export async function createStaking(event: SubstrateEvent) {
-	if (event.event.method in Object.keys(eventAction)) {
+	if (event.event.method in eventAction) {
 		await eventAction[event.event.method](event)
 	} else if (event.event.method in ['DelegatorLeft', 'NominatorLeft']) {
 		await removeAllDelegations(event.event.data[0].toString(), null);

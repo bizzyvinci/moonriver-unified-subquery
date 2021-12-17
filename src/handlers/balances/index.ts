@@ -12,7 +12,7 @@ const Actions = {
 export async function createBalances(event: SubstrateEvent) {
 	if (event.event.method === 'Transfer') {
 		await createTransfer(event)
-	} else if (event.event.method in Object.keys(Actions)) {
+	} else if (event.event.method in Actions) {
 		const [accountId, value] = event.event.data.toJSON() as [string, string]
 		await Actions[event.event.method](accountId, BigInt(value))
 	}
