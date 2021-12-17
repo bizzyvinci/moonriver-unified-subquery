@@ -4,20 +4,21 @@ import { ensureExtrinsic } from '../extrinsic'
 import { removeAllDelegations } from './delegate'
 
 
-export async function ensureCandidate(recordId: string) {
+export async function ensureCandidate(recordId: string, amount?:string) {
 	let data = await Candidate.get(recordId)
 	if (!data) {
 		data = new Candidate(recordId)
+		data.selfBonded = amount ? BigInt(amount) : BigInt(1000000000000000000000)
 		await data.save()
 	}
 	return data
 }
 
 export async function createCandidate(event: SubstrateEvent) {
-	const data = await ensureCandidate(event.event.data[0].toString())
+	const [candidateId, amount, amountTotal] = event.event.data.toJSON() as [string, string, string]
+	const data = await ensureCandidate(candidateId, amount)
 	const extrinsic = await ensureExtrinsic(event.extrinsic)
 
-	data.selfBonded = BigInt(event.event.data[1].toString())
 	data.joinedExtrinsicId = extrinsic.id
 	await data.save()
 	return data
@@ -42,4 +43,3 @@ export async function removeCandidate(event: SubstrateEvent) {
 	await Candidate.remove(candidateId)
 	await removeAllDelegations(null, candidateId)
 }
-
