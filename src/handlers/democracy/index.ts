@@ -24,7 +24,7 @@ const Action = {
 }
 
 export async function createDemocracy(event: SubstrateEvent) {
-	if (event.event.method in Action) {
+	if (Action.hasOwnProperty(event.event.method)) {
 		await Action[event.event.method](event)
 	}
 }

@@ -6,7 +6,7 @@ import { createReward } from './reward';
 
 // Lingo really change between spec versions
 // e.g Collator to Candidate and Nomination to Delegation
-const eventAction = {
+const Action = {
 	Rewarded: createReward,
 	JoinedCollatorCandidates: createCandidate,
 	CollatorChosen: chooseCandidate,
@@ -27,8 +27,8 @@ const eventAction = {
 }
 
 export async function createStaking(event: SubstrateEvent) {
-	if (event.event.method in eventAction) {
-		await eventAction[event.event.method](event)
+	if (Action.hasOwnProperty(event.event.method)) {
+		await Action[event.event.method](event)
 	} else if (event.event.method in ['DelegatorLeft', 'NominatorLeft']) {
 		await removeAllDelegations(event.event.data[0].toString(), null);
 	}
