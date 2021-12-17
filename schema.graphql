@@ -109,29 +109,23 @@ type Timeline @jsonField {
 }
 
 
-type Preimage @entity {
-	id: ID!
-	createdAtExtrinsic: Extrinsic
-	author: Account
-}
-
-
 type Proposal @entity {
 	id: ID!
 	deposit: BigInt
+	author: String
+	preimage: String
 	timeline: [Timeline]
-	preimage: Preimage
 }
 
 
 type Referendum @entity {
 	id: ID!
+	threshold: String
 	timeline: [Timeline]
 	executed: Boolean
-	preimage: Preimage
-	delay: Int
-	end: BigInt
-	threshold: String
+	#preimage: string
+	#delay: Int
+	#end: BigInt
 }
 
 

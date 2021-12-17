@@ -5,7 +5,7 @@ import { ensureExtrinsic } from './extrinsic'
 import { createStaking } from './staking'
 import { createBalances } from './balances'
 import { linkTransaction } from './ethereum'
-//import { createDemocracy } from './democracy'
+import { createDemocracy } from './democracy'
 
 
 export async function ensureEvent(event: SubstrateEvent) {
@@ -48,7 +48,7 @@ export async function createEvent(event: SubstrateEvent) {
 	} else if (data.section === 'ethereum') {
 		await linkTransaction(event)
 	} else if (data.section === 'democracy') {
-		//await createDemocracy(event)
+		await createDemocracy(event)
 	}
 
 	return data
