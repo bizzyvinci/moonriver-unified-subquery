@@ -1,5 +1,6 @@
 type Block @entity {
 	id: ID!
+	number: BigInt! @index(unique: true)
 	hash: String
 	timestamp: Date
 	parentHash: String

@@ -6,6 +6,7 @@ export async function ensureBlock(recordId: string) {
 	let data = await Block.get(recordId)
 	if (!data) {
 		data = new Block(recordId)
+		data.number = BigInt(recordId)
 		await data.save()
 	}
 	return data
