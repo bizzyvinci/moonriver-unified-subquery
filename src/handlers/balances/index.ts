@@ -1,11 +1,19 @@
 import { SubstrateEvent } from '@subql/types'
-import { createTransfer } from './transfer'
+import { createTransfer, deposit, withdraw, reserve, unreserve } from './transfer'
 
+
+const Action = {
+	Deposit: deposit,
+	Withdraw: withdraw,
+	Reserved: reserve,
+	Unreserved: unreserve,
+}
 
 export async function createBalances(event: SubstrateEvent) {
 	if (event.event.method === 'Transfer') {
 		await createTransfer(event)
+	} else if (Action.hasOwnProperty(event.event.method)) {
+		const [accountId, value] = event.event.data.toJSON() as [string, string]
+		await Action[event.event.method](accountId, BigInt(value))
 	}
-	// Deposit and Withdraw affects balance
-	// They need to be handled when working on Balance
 }

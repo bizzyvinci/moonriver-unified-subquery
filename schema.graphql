@@ -1,5 +1,6 @@
 type Block @entity {
 	id: ID!
+	number: BigInt! @index(unique: true)
 	hash: String
 	timestamp: Date
 	parentHash: String
@@ -25,7 +26,7 @@ type Extrinsic  @entity {
 	method: String
 	index: Int
 	success: Boolean
-	transaction: Transaction
+	transaction: Transaction @derivedFrom(field: "extrinsic")
 	arguments: String
 	# lifeTime, evm, nonce
 }
@@ -47,12 +48,12 @@ type Event @entity {
 
 type Account @entity {
 	id: ID!
-	extrinsics: [Extrinsic] @derivedFrom(field: "signer")
-	inTransactions: [Transaction] @derivedFrom(field: "to")
-	outTransactions: [Transaction] @derivedFrom(field: "from")
-	#txCount: BigInt
-	#createAtBlock: Block
-	# transfers, balance, type(contract?)
+	freeBalance: BigInt
+	reservedBalance: BigInt
+	# Contracts
+	isContract: Boolean
+	creator: Account
+	createdAt: String
 }
 
 
@@ -91,97 +92,129 @@ type Transaction @entity {
 }
 
 
-type MOVRTransfer @entity {
+type Transfer @entity {
 	id: ID!
 	index: Int
 	block: Block
 	extrinsic: Extrinsic
 	from: Account
 	to: Account
-	value: String
+	value: BigInt
 }
 
 
-# type BalanceMOVR @entity {
-# 	id: ID!
-# 	account: Account
-# 	type: String
-# 	amount: BigInt
-# }
+type Timeline @jsonField {
+	status: String
+	extrinsic: String
+	timestamp: Date
+}
 
 
-# type Balance20 @entity {
-# 	id: ID!
-# 	owner: Account
-# 	token: ERC20Token
-# 	amount: BigInt
-# }
+type Proposal @entity {
+	id: ID!
+	deposit: BigInt
+	author: String
+	preimage: String
+	timeline: [Timeline]
+}
 
 
-# type Balance721 @entity {
-# 	id: ID!
-# 	owner: Account
-# 	token: ERC721Token
-# 	tokenIDs: [Int]
-# }
+type Referendum @entity {
+	id: ID!
+	threshold: String
+	timeline: [Timeline]
+	executed: Boolean
+	#preimage: string
+	#delay: Int
+	#end: BigInt
+}
 
 
-# type Contract @entity {
-# 	id: ID!
-# 	creator: Account
-# 	creationHash: Transaction
-# }
+type ERC20Balance @entity {
+	id: ID!
+	account: Account
+	token: ERC20Token
+	value: BigInt
+}
 
 
-# type ERC20Token @entity {
-# 	id: ID!
-# 	symbol: String
-# 	name: String
-# 	supply: String
-# 	decimal: Int
-# 	holders: [Account]
-# }
+type ERC721Balance @entity {
+	id: ID!
+	account: Account
+	token: ERC721Token
+	value: BigInt
+}
 
 
-# type ERC721Token @entity {
-# 	id: ID!
-# 	symbol: String
-# 	name: String
-# 	tokenIDs: [Int]
-# 	holders: [Account]
-# }
+type ERC20Token @entity {
+	id: ID!
+	symbol: String
+	name: String
+	decimal: Int
+	supply: BigInt
+	balances: [ERC20Balance] @derivedFrom(field: "token")
+}
 
 
-# type ERC20TokenTransfer @entity {
-# 	id: ID!
-# 	from: Account
-# 	to: Account
-# 	token: ERC20Token
-# 	amount: BigInt
-# }
+type ERC721Token @entity {
+	id: ID!
+	symbol: String
+	name: String
+	supply: [BigInt] #array of token ids
+	balances: [ERC721Balance] @derivedFrom(field: "token")
+}
 
 
-# type ERC721TokenTransfer @entity {
-# 	id: ID!
-# 	from: Account
-# 	to: Account
-# 	token: ERC721Token
-# 	tokenID: Int
-# }
+type ERC20Transfer @entity {
+	id: ID!
+	from: Account
+	to: Account
+	token: ERC20Token
+	value: BigInt
+	log: Log
+}
 
 
-type Collator @entity {
+type ERC721Transfer @entity {
+	id: ID!
+	from: Account
+	to: Account
+	token: ERC721Token
+	value: BigInt
+	log: Log
+}
+
+
+# There's currently no slash, just rewards
+type Reward @entity {
+	id: ID!
+	account: Account
+	value: BigInt
+	timestamp: Date
+}
+
+
+type Delegation @entity {
+	id: ID!
+	delegator: Delegator
+	candidate: Candidate
+	value: BigInt
+}
+
+
+type Candidate @entity {
 	id: ID!
 	joinedExtrinsic: Extrinsic
-	active: Boolean
+	isChosen: Boolean
+	delegations: [Delegation] @derivedFrom(field: "candidate")
+	selfBonded: BigInt
 	#blocks: [Block]
-	#rewards: []
-	#delegators: [Delegator]
 }
 
 
 type Delegator @entity {
 	id: ID!
+	delegations: [Delegation] @derivedFrom(field: "delegator")
 }
 
 
