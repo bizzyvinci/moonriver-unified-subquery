@@ -23,6 +23,7 @@ export async function createTransfer(event: SubstrateEvent) {
 		id: recordId,
 		index: idx,
 		blockId: blockId,
+		blockNumber: BigInt(blockId),
 		extrinsicId: extrinsic.id,
 		fromId: from.id,
 		toId: to.id,
