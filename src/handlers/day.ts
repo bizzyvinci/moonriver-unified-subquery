@@ -17,6 +17,7 @@ export async function ensureDay(date: Date) {
 			transferAmount: BigInt(0),
 			erc20TransferCounts: BigInt(0),
 			erc721TransferCounts: BigInt(0),
+			newContracts: BigInt(0)
 		})
 		await data.save()
 	}
