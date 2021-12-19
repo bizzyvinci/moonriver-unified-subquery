@@ -33,27 +33,29 @@ export async function createTransfer(event: SubstrateEvent) {
 
 export async function deposit(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) + value
+	account.freeBalance += value
+	account.totalBalance += value
 	await account.save()
 }
 
 export async function withdraw(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) - value
+	account.freeBalance -= value
+	account.totalBalance -= value
 	await account.save()
 }
 
 export async function reserve(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) - value
-	account.reservedBalance = (account.reservedBalance || BigInt(0)) + value
+	account.freeBalance -= value
+	account.reservedBalance += value
 	await account.save()
 }
 
 export async function unreserve(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) + value
-	account.reservedBalance = (account.reservedBalance || BigInt(0)) - value
+	account.freeBalance += value
+	account.reservedBalance -= value
 	await account.save()
 }
 

@@ -20,6 +20,7 @@ export async function ensureDelegation(delegatorId: string, candidateId: string)
 		data = new Delegation(recordId)
 		data.delegatorId = delegatorId
 		data.candidateId = candidateId
+		data.value = BigInt(0)
 		await data.save()
 	}
 	return data

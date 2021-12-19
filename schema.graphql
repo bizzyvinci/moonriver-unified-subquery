@@ -18,13 +18,14 @@ type Block @entity {
 
 type Extrinsic  @entity {
 	id: ID!
-	hash: String
+	hash: String!
 	block: Block
+	blockNumber: BigInt! @index(unique: false)
 	isSigned: Boolean
 	signer: Account
 	section: String
 	method: String
-	index: Int
+	index: Int!
 	success: Boolean
 	transaction: Transaction @derivedFrom(field: "extrinsic")
 	arguments: String
@@ -34,8 +35,9 @@ type Extrinsic  @entity {
 
 type Event @entity {
 	id: ID!
-	index: Int
+	index: Int!
 	block: Block
+	blockNumber: BigInt! @index(unique: false)
 	timestamp: Date
 	section: String
 	method: String
@@ -48,8 +50,9 @@ type Event @entity {
 
 type Account @entity {
 	id: ID!
-	freeBalance: BigInt
-	reservedBalance: BigInt
+	freeBalance: BigInt! @index(unique: false)
+	reservedBalance: BigInt! @index(unique: false)
+	totalBalance: BigInt! @index(unique: false)
 	# Contracts
 	isContract: Boolean
 	creator: Account
@@ -75,6 +78,7 @@ type Log @entity {
 type Transaction @entity {
 	id: ID!
 	block: Block
+	blockNumber: BigInt! @index(unique: false)
 	extrinsic: Extrinsic
 	from: Account
 	to: Account
@@ -88,18 +92,19 @@ type Transaction @entity {
 	data: String
 	arguments: String
 	logs: [Log] @derivedFrom(field: "transaction")
-	# index (extrinsic), gasUsed/fee, extrinsic, transfers
+	# gasUsed/fee, extrinsic, transfers
 }
 
 
 type Transfer @entity {
 	id: ID!
-	index: Int
-	block: Block
-	extrinsic: Extrinsic
-	from: Account
-	to: Account
-	value: BigInt
+	index: Int!
+	block: Block!
+	blockNumber: BigInt! @index(unique: false)
+	extrinsic: Extrinsic!
+	from: Account!
+	to: Account!
+	value: BigInt!
 }
 
 
@@ -112,6 +117,7 @@ type Timeline @jsonField {
 
 type Proposal @entity {
 	id: ID!
+	propIndex: Int! @index(unique: true)
 	deposit: BigInt
 	author: String
 	preimage: String
@@ -121,6 +127,7 @@ type Proposal @entity {
 
 type Referendum @entity {
 	id: ID!
+	refIndex: Int! @index(unique: true)
 	threshold: String
 	timeline: [Timeline]
 	executed: Boolean
@@ -188,6 +195,7 @@ type ERC721Transfer @entity {
 # There's currently no slash, just rewards
 type Reward @entity {
 	id: ID!
+	blockNumber: BigInt! @index(unique: false)
 	account: Account
 	value: BigInt
 	timestamp: Date
@@ -198,7 +206,7 @@ type Delegation @entity {
 	id: ID!
 	delegator: Delegator
 	candidate: Candidate
-	value: BigInt
+	value: BigInt! @index(unique: false)
 }
 
 
@@ -207,7 +215,7 @@ type Candidate @entity {
 	joinedExtrinsic: Extrinsic
 	isChosen: Boolean
 	delegations: [Delegation] @derivedFrom(field: "candidate")
-	selfBonded: BigInt
+	selfBonded: BigInt!
 	#blocks: [Block]
 }
 
@@ -216,7 +224,3 @@ type Delegator @entity {
 	id: ID!
 	delegations: [Delegation] @derivedFrom(field: "delegator")
 }
-
-
-# vote/stake/nominating
-# rewards, block generated

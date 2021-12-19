@@ -17,6 +17,7 @@ export async function ensureEvent(event: SubstrateEvent) {
 		data = new Event(recordId)
 		data.index = idx
 		data.blockId = block.id
+		data.blockNumber = BigInt(block.id)
 		data.timestamp = block.timestamp
 		await data.save()
 	}

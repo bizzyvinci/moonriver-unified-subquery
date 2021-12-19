@@ -14,6 +14,7 @@ export async function ensureExtrinsic(extrinsic: SubstrateExtrinsic): Promise<Ex
 	if (!data) {
 		data = new Extrinsic(recordId)
 		data.blockId = block.id
+		data.blockNumber = BigInt(block.id)
 		data.index = index
 		data.hash = hash
 		await data.save()

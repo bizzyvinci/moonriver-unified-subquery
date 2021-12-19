@@ -6,7 +6,8 @@ import { createERC20Transfer, createERC721Transfer, linkContract } from './ether
 
 
 export async function ensureLog(event: MoonbeamEvent) {
-	const transaction = await ensureTransaction(event.transactionHash)
+	const transaction = await ensureTransaction(event.transactionHash,
+		event.blockNumber.toString())
 	const transactionIndex = event.transactionIndex
 	const logIndex = event.logIndex
 	

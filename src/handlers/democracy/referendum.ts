@@ -7,6 +7,7 @@ export async function ensureReferendum(refIndex: string) {
 	let data = Referendum.get(refIndex)
 	if (!data) {
 		const data = new Referendum(refIndex)
+		data.refIndex = Number(refIndex)
 		await data.save()
 	}
 	return data
