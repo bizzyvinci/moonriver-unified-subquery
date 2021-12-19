@@ -8,6 +8,7 @@ export async function ensureCandidate(recordId: string, amount?:string) {
 	let data = await Candidate.get(recordId)
 	if (!data) {
 		data = new Candidate(recordId)
+		// The default amount is because of the genesis candidates
 		data.selfBonded = amount ? BigInt(amount) : BigInt(1000000000000000000000)
 		await data.save()
 	}

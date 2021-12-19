@@ -2,6 +2,7 @@ import { SubstrateExtrinsic } from '@subql/types'
 import { Extrinsic } from '../types'
 import { ensureAccount } from './account'
 import { ensureBlock } from './block'
+import { ensureDay } from './day'
 
 
 export async function ensureExtrinsic(extrinsic: SubstrateExtrinsic): Promise<Extrinsic> {
@@ -14,6 +15,7 @@ export async function ensureExtrinsic(extrinsic: SubstrateExtrinsic): Promise<Ex
 	if (!data) {
 		data = new Extrinsic(recordId)
 		data.blockId = block.id
+		data.blockNumber = BigInt(block.id)
 		data.index = index
 		data.hash = hash
 		await data.save()
@@ -39,5 +41,10 @@ export async function createExtrinsic(extrinsic: SubstrateExtrinsic) {
 	data.arguments = extrinsic.extrinsic.args.toString()
 
 	await data.save()
+	
+	const day = await ensureDay(extrinsic.block.timestamp)
+	day.extrinsics += BigInt(1)
+	await day.save()
+	
 	return data
 }

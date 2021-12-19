@@ -4,9 +4,10 @@ import { getTimeline } from '.'
 
 
 export async function ensureReferendum(refIndex: string) {
-	let data = Referendum.get(refIndex)
+	let data = await Referendum.get(refIndex)
 	if (!data) {
-		const data = new Referendum(refIndex)
+		data = new Referendum(refIndex)
+		data.refIndex = Number(refIndex)
 		await data.save()
 	}
 	return data

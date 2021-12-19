@@ -2,6 +2,7 @@ import { SubstrateEvent } from '@subql/types'
 import { Transfer } from '../../types'
 import { ensureExtrinsic } from '../extrinsic'
 import { ensureAccount } from '../account'
+import { ensureDay } from '../day'
 
 
 export async function createTransfer(event: SubstrateEvent) {
@@ -22,38 +23,47 @@ export async function createTransfer(event: SubstrateEvent) {
 		id: recordId,
 		index: idx,
 		blockId: blockId,
+		blockNumber: BigInt(blockId),
 		extrinsicId: extrinsic.id,
 		fromId: from.id,
 		toId: to.id,
 		value: BigInt(value)
 	})
 	await data.save()
+
+	const day = await ensureDay(event.block.timestamp)
+	day.transferCounts += BigInt(1)
+	day.transferAmount += BigInt(value)
+	day.save()
+
 	return data
 }
 
 export async function deposit(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) + value
+	account.freeBalance += value
+	account.totalBalance += value
 	await account.save()
 }
 
 export async function withdraw(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) - value
+	account.freeBalance -= value
+	account.totalBalance -= value
 	await account.save()
 }
 
 export async function reserve(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) - value
-	account.reservedBalance = (account.reservedBalance || BigInt(0)) + value
+	account.freeBalance -= value
+	account.reservedBalance += value
 	await account.save()
 }
 
 export async function unreserve(accountId: string, value: bigint) {
 	const account = await ensureAccount(accountId)
-	account.freeBalance = (account.freeBalance || BigInt(0)) + value
-	account.reservedBalance = (account.reservedBalance || BigInt(0)) - value
+	account.freeBalance += value
+	account.reservedBalance -= value
 	await account.save()
 }
 

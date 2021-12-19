@@ -7,6 +7,7 @@ export async function ensureProposal(propIndex: string) {
 	let data = Proposal.get(propIndex)
 	if (!data) {
 		const data = new Proposal(propIndex)
+		data.propIndex = Number(propIndex)
 		await data.save()
 	}
 	return data
