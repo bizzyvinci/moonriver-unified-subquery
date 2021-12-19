@@ -1,6 +1,7 @@
 import { MoonbeamEvent } from '@subql/contract-processors/dist/moonbeam'
 import { ensureBlock } from './block'
 import { ensureTransaction } from './transaction'
+import { ensureDay } from './day'
 import { Log } from '../types'
 import { createERC20Transfer, createERC721Transfer, linkContract } from './ethereum'
 
@@ -40,13 +41,18 @@ export async function createLog(event: MoonbeamEvent) {
 	
 	data.removed = event.removed
 
+	
+	const day = await ensureDay(event.blockTimestamp)
+	
 	switch(event.topics[0]) {
 		// Transfer
 		case "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
 			if (event.topics.length === 3) {
 				await createERC20Transfer(event, data.id)
+				day.erc20TransferCounts += BigInt(1)
 			} else if (event.topics.length === 4) {
 				await createERC721Transfer(event, data.id)
+				day.erc721TransferCounts += BigInt(1)
 			}
 		}
 
@@ -55,10 +61,13 @@ export async function createLog(event: MoonbeamEvent) {
 			// Contract Creation
 			if (event.topics[1] === '0x0000000000000000000000000000000000000000000000000000000000000000') {
 				await linkContract(event)
+				day.newContracts += BigInt(1)
 			}
 		}
 	}
 
+	await day.save()
 	await data.save()
+	
 	return data
 }

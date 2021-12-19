@@ -2,6 +2,7 @@ import { SubstrateEvent } from '@subql/types'
 import { Transfer } from '../../types'
 import { ensureExtrinsic } from '../extrinsic'
 import { ensureAccount } from '../account'
+import { ensureDay } from '../day'
 
 
 export async function createTransfer(event: SubstrateEvent) {
@@ -28,6 +29,12 @@ export async function createTransfer(event: SubstrateEvent) {
 		value: BigInt(value)
 	})
 	await data.save()
+
+	const day = await ensureDay(event.block.timestamp)
+	day.transferCounts += BigInt(1)
+	day.transferAmount += BigInt(value)
+	day.save()
+
 	return data
 }
 

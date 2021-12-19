@@ -2,6 +2,7 @@ import { MoonbeamCall } from '@subql/contract-processors/dist/moonbeam'
 import { ensureBlock } from './block'
 import { Transaction } from '../types'
 import { ensureAccount } from './account'
+import { ensureDay } from './day'
 
 
 export async function ensureTransaction(hash: string, blockId: string) {
@@ -37,5 +38,10 @@ export async function createTransaction(call: MoonbeamCall) {
 	data.arguments = call.args?.toString()
 
 	await data.save()
+
+	const day = await ensureDay(new Date(call.timestamp * 1000))
+	day.transactions += BigInt(1)
+	await day.save()
+	
 	return data
 }

@@ -2,6 +2,7 @@ import { SubstrateEvent } from '@subql/types'
 import { Event } from '../types'
 import { ensureBlock } from './block'
 import { ensureExtrinsic } from './extrinsic'
+import { ensureDay } from './day'
 import { createStaking } from './staking'
 import { createBalances } from './balances'
 import { linkTransaction } from './ethereum'
@@ -41,6 +42,10 @@ export async function createEvent(event: SubstrateEvent) {
 	}
 
 	await data.save()
+
+	const day = await ensureDay(event.block.timestamp)
+	day.events += BigInt(1)
+	await day.save()
 
 	if (data.section === 'parachainStaking') {
 		await createStaking(event)

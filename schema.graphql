@@ -224,3 +224,19 @@ type Delegator @entity {
 	id: ID!
 	delegations: [Delegation] @derivedFrom(field: "delegator")
 }
+
+
+type Day @entity {
+	id: ID!
+	year: Int!
+	month: Int!
+	day: Int!
+	extrinsics: BigInt
+	transactions: BigInt
+	events: BigInt
+	transferCounts: BigInt
+	transferAmount: BigInt
+	erc20TransferCounts: BigInt
+	erc721TransferCounts: BigInt
+	newContracts: BigInt
+}
