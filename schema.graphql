@@ -167,7 +167,6 @@ type ERC721Token @entity {
 	id: ID!
 	symbol: String
 	name: String
-	supply: [BigInt] #array of token ids
 	balances: [ERC721Balance] @derivedFrom(field: "token")
 }
 

@@ -23,17 +23,6 @@ export async function createERC721Transfer(event: MoonbeamEvent, recordId: strin
 
 	await transfer.save()
 
-	// Minting and Burning
-	if (from.id === NULL_ADDRESS) {
-		token.supply.push(value)
-	} else if (to.id === NULL_ADDRESS) {
-		const idx = token.supply.indexOf(value)
-		if (idx>-1) {
-			token.supply.splice(idx, 1)
-		}
-	}
-	await token.save()
-
 	// Set Balance
 	await setBalance(token.id, to.id, value)
 }
