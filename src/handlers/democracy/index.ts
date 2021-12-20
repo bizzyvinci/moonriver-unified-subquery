@@ -6,7 +6,7 @@ import { createReferendum, updateReferendum } from './referendum'
 export function getTimeline(event: SubstrateEvent) {
 	const timeline = {
 		status: event.event.method,
-		extrinsic: `${event.block.block.header.number}-${event.extrinsic.idx}`,
+		extrinsic: event.extrinsic && `${event.block.block.header.number}-${event.extrinsic.idx}`,
 		timestamp: event.block.timestamp,
 	}
 	return timeline
