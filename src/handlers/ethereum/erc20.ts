@@ -1,24 +1,27 @@
 import { MoonbeamEvent } from '@subql/contract-processors/dist/moonbeam'
 import { ensureAccount } from '../account'
-import { ERC20Token, ERC20Balance, ERC20Transfer} from '../../types'
+import { Erc20Token, Erc20Balance, Erc20Transfer, Log} from '../../types'
 
 
 const NULL_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-export async function createERC20Transfer(event: MoonbeamEvent, recordId: string) {
+export async function createErc20Transfer(event: MoonbeamEvent, log: Log) {
 	// create Transfer, Edit Balance, 
 	const token = await ensureToken(event.address)
 	const from = await ensureAccount(`0x${event.topics[1].slice(-40)}`)
 	const to = await ensureAccount(`0x${event.topics[2].slice(-40)}`)
 	const value = BigInt(event.data)
 
-	const transfer = ERC20Transfer.create({
-		id: recordId,
+	const transfer = Erc20Transfer.create({
+		id: log.id,
 		fromId: from.id,
 		toId: to.id,
 		tokenId: token.id,
 		value: value,
-		logId: recordId,
+		transactionHash: log.transactionId,
+		transactionIndex: log.transactionIndex,
+		blockNumber: BigInt(log.blockId),
+		timestamp: log.timestamp
 	})
 
 	await transfer.save()
@@ -45,9 +48,9 @@ export async function createERC20Transfer(event: MoonbeamEvent, recordId: string
 
 
 async function ensureToken(address: string) {
-	let data = await ERC20Token.get(address)
+	let data = await Erc20Token.get(address)
 	if (!data) {
-		data = ERC20Token.create({
+		data = Erc20Token.create({
 			id: address,
 			supply: BigInt(0)
 		})
@@ -59,9 +62,9 @@ async function ensureToken(address: string) {
 
 async function ensureBalance(tokenId: string, accountId: string) {
 	const recordId = `${tokenId}-${accountId}`
-	let data = await ERC20Balance.get(recordId)
+	let data = await Erc20Balance.get(recordId)
 	if (!data) {
-		data = ERC20Balance.create({
+		data = Erc20Balance.create({
 			id: recordId,
 			tokenId: tokenId,
 			accountId: accountId,

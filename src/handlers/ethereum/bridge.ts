@@ -10,6 +10,7 @@ export async function linkTransaction(event: SubstrateEvent) {
 			event.block.block.header.number.toString())
 		const extrinsic = await ensureExtrinsic(event.extrinsic)
 		transaction.extrinsicId = extrinsic.id
+		transaction.extrinsicIndex = extrinsic.index
 		
 		await transaction.save()
 	}

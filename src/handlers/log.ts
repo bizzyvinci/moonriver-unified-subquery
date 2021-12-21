@@ -3,7 +3,7 @@ import { ensureBlock } from './block'
 import { ensureTransaction } from './transaction'
 import { ensureDay } from './day'
 import { Log } from '../types'
-import { createERC20Transfer, createERC721Transfer, linkContract } from './ethereum'
+import { createErc20Transfer, createErc721Transfer, linkContract } from './ethereum'
 
 
 export async function ensureLog(event: MoonbeamEvent) {
@@ -48,10 +48,10 @@ export async function createLog(event: MoonbeamEvent) {
 		// Transfer
 		case "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
 			if (event.topics.length === 3) {
-				await createERC20Transfer(event, data.id)
+				await createErc20Transfer(event, data)
 				day.erc20TransferCounts += BigInt(1)
 			} else if (event.topics.length === 4) {
-				await createERC721Transfer(event, data.id)
+				await createErc721Transfer(event, data)
 				day.erc721TransferCounts += BigInt(1)
 			}
 		}

@@ -80,6 +80,7 @@ type Transaction @entity {
 	block: Block
 	blockNumber: BigInt! @index(unique: false)
 	extrinsic: Extrinsic
+	extrinsicIndex: Int
 	from: Account
 	to: Account
 	success: Boolean
@@ -137,57 +138,63 @@ type Referendum @entity {
 }
 
 
-type ERC20Balance @entity {
+type Erc20Balance @entity {
 	id: ID!
 	account: Account
-	token: ERC20Token
+	token: Erc20Token
 	value: BigInt
 }
 
 
-type ERC721Balance @entity {
+type Erc721Balance @entity {
 	id: ID!
 	account: Account
-	token: ERC721Token
+	token: Erc721Token
 	value: BigInt
 }
 
 
-type ERC20Token @entity {
+type Erc20Token @entity {
 	id: ID!
 	symbol: String
 	name: String
 	decimal: Int
 	supply: BigInt
-	balances: [ERC20Balance] @derivedFrom(field: "token")
+	balances: [Erc20Balance] @derivedFrom(field: "token")
 }
 
 
-type ERC721Token @entity {
+type Erc721Token @entity {
 	id: ID!
 	symbol: String
 	name: String
-	balances: [ERC721Balance] @derivedFrom(field: "token")
+	balances: [Erc721Balance] @derivedFrom(field: "token")
 }
 
 
-type ERC20Transfer @entity {
+type Erc20Transfer @entity {
 	id: ID!
 	from: Account
 	to: Account
-	token: ERC20Token
+	token: Erc20Token
 	value: BigInt
-	log: Log
+	transactionHash: String
+	transactionIndex: Int
+	blockNumber: BigInt
+	timestamp: Date
 }
 
 
-type ERC721Transfer @entity {
+type Erc721Transfer @entity {
 	id: ID!
 	from: Account
 	to: Account
-	token: ERC721Token
+	token: Erc721Token
 	value: BigInt
-	log: Log
+	transactionHash: String
+	transactionIndex: Int
+	blockNumber: BigInt
+	timestamp: Date
 }
 
 
