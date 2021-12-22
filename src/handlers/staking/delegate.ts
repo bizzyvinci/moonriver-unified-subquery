@@ -38,7 +38,7 @@ export async function createDelegation(event: SubstrateEvent) {
 }
 
 export async function changeDelegation(event: SubstrateEvent) {
-	const [delegatorId, candidateId, value, bool] = event.event.data.toJSON() as [string, string, string, Boolean]
+	const [delegatorId, candidateId, value, isTop] = event.event.data.toJSON() as [string, string, string, boolean]
 	const delegator = await ensureDelegator(delegatorId)
 	const candidate = await ensureCandidate(candidateId)
 	

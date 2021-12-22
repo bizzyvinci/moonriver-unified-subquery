@@ -24,5 +24,7 @@ Terms used are a blend of subscan and moonscan with a little difference
 * Erc20Balance maps token and account with the amount held
 * Erc721Balance maps token and account with the Token ID held
 * Erc20Transfer and Erc721Transfer are transfers of Erc20Token and Erc721Token respectively
-* Reward, Delegation, Delegator and Candidate are for staking events. This reflects the new terms used by moonbeam compared to the old Nomination, Nominator and Collator
+* Reward, Delegation, Delegator and Candidate are for staking events. This reflects the new terms used by moonbeam compared to the old Nomination, Nominator and Collator (aka validator on subscan)
 * Day are for aggregating events. Would be useful for building analytics chart
+
+Please note: I'm not so sure if Account.[Balance] is 100% done right.
