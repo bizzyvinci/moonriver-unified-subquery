@@ -27,7 +27,6 @@ type Extrinsic  @entity {
 	method: String
 	index: Int!
 	success: Boolean
-	transaction: Transaction @derivedFrom(field: "extrinsic")
 	arguments: String
 	# lifeTime, evm, nonce
 }
