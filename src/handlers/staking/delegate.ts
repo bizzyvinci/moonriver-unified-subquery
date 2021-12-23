@@ -1,6 +1,5 @@
 import { SubstrateEvent } from '@subql/types'
 import { Delegator, Delegation } from '../../types'
-import { ensureExtrinsic } from '../extrinsic'
 import { ensureCandidate } from './candidate'
 
 

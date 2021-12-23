@@ -102,7 +102,7 @@ type Transfer @entity {
 	index: Int!
 	block: Block!
 	blockNumber: BigInt! @index(unique: false)
-	extrinsic: Extrinsic!
+	extrinsic: Extrinsic
 	from: Account!
 	to: Account!
 	value: BigInt!
@@ -218,10 +218,11 @@ type Delegation @entity {
 
 type Candidate @entity {
 	id: ID!
-	joinedExtrinsic: Extrinsic
+	joined: Date
 	isChosen: Boolean
 	delegations: [Delegation] @derivedFrom(field: "candidate")
 	selfBonded: BigInt!
+	totalBonded: BigInt!
 	#blocks: [Block]
 }
 

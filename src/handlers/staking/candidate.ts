@@ -1,6 +1,5 @@
 import { SubstrateEvent } from '@subql/types'
 import { Candidate } from '../../types'
-import { ensureExtrinsic } from '../extrinsic'
 import { removeAllDelegations } from './delegate'
 
 
@@ -18,9 +17,7 @@ export async function ensureCandidate(recordId: string, amount?:string) {
 export async function createCandidate(event: SubstrateEvent) {
 	const [candidateId, amount, amountTotal] = event.event.data.toJSON() as [string, string, string]
 	const data = await ensureCandidate(candidateId, amount)
-	const extrinsic = await ensureExtrinsic(event.extrinsic)
-
-	data.joinedExtrinsicId = extrinsic.id
+	data.joined = event.block.timestamp
 	await data.save()
 	return data
 }

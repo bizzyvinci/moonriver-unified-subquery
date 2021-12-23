@@ -10,7 +10,10 @@ export async function createTransfer(event: SubstrateEvent) {
 	
 	const from = await ensureAccount(fromId)
 	const to = await ensureAccount(toId)
-	const extrinsic = await ensureExtrinsic(event.extrinsic)
+	let extrinsic;
+	if (event.extrinsic) {
+		extrinsic = await ensureExtrinsic(event.extrinsic)
+	}
 
 	await deposit(to.id, BigInt(value))
 	await withdraw(from.id, BigInt(value))
@@ -24,7 +27,7 @@ export async function createTransfer(event: SubstrateEvent) {
 		index: idx,
 		blockId: blockId,
 		blockNumber: BigInt(blockId),
-		extrinsicId: extrinsic.id,
+		extrinsicId: extrinsic?.id,
 		fromId: from.id,
 		toId: to.id,
 		value: BigInt(value)
