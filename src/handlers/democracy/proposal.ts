@@ -27,7 +27,12 @@ export async function createProposal(event: SubstrateEvent) {
 
 export async function updateProposal(event: SubstrateEvent) {
 	const data = await ensureProposal(event.event.data[0].toString())
-	data.timeline.push(getTimeline(event))
+	const timeline = getTimeline(event)
+	if (data.timeline) {
+		data.timeline.push(timeline)
+	} else {
+		data.timeline = [timeline]
+	}
 	await data.save()
 	return data
 }

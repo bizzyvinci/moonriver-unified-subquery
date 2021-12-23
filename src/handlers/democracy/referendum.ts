@@ -26,7 +26,11 @@ export async function createReferendum(event: SubstrateEvent) {
 export async function updateReferendum(event: SubstrateEvent) {
 	const data = await ensureReferendum(event.event.data[0].toString())
 	const timeline = getTimeline(event)
-	data.timeline.push(timeline)
+	if (data.timeline) {
+		data.timeline.push(timeline)
+	} else {
+		data.timeline = [timeline]
+	}
 	data.executed = data.executed || (timeline.status==='Executed')
 	await data.save()
 	return data
