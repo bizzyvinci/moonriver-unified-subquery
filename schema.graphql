@@ -222,7 +222,6 @@ type Candidate @entity {
 	isChosen: Boolean
 	delegations: [Delegation] @derivedFrom(field: "candidate")
 	selfBonded: BigInt!
-	totalBonded: BigInt!
 	#blocks: [Block]
 }
 
