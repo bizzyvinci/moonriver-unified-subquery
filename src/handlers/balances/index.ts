@@ -12,7 +12,7 @@ const Action = {
 export async function createBalances(event: SubstrateEvent) {
   if (event.event.method === 'Transfer') {
     await createTransfer(event)
-  } else if (Action.hasOwnProperty(event.event.method)) {
+  } else if (Object.prototype.hasOwnProperty.call(Action, event.event.method)) {
     const [accountId, value] = event.event.data.toJSON() as [string, string]
     await Action[event.event.method](accountId, BigInt(value))
   }

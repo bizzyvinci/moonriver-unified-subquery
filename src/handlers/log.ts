@@ -54,6 +54,7 @@ export async function createLog(event: MoonbeamEvent) {
         await createErc721Transfer(event, data)
         day.erc721TransferCounts += BigInt(1)
       }
+      break
     }
 
     // OwnershipTransferred

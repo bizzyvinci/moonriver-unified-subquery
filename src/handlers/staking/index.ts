@@ -27,7 +27,7 @@ const Action = {
 }
 
 export async function createStaking(event: SubstrateEvent) {
-  if (Action.hasOwnProperty(event.event.method)) {
+  if (Object.prototype.hasOwnProperty.call(Action, event.event.method)) {
     await Action[event.event.method](event)
   } else if (event.event.method in ['DelegatorLeft', 'NominatorLeft']) {
     await removeAllDelegations(event.event.data[0].toString(), null);

@@ -50,7 +50,7 @@ export async function changeDelegation(event: SubstrateEvent) {
 export async function removeDelegation(event: SubstrateEvent) {
   const [delegatorId, candidateId, unstakedAmount, newAmount] = event.event.data.toJSON() as [string, string, string, string]
   const recordId = `${delegatorId}-${candidateId}`
-  let data = await Delegation.remove(recordId)
+  const data = await Delegation.remove(recordId)
 }
 
 export async function removeAllDelegations(delegatorId?: string, candidateId?:string) {
